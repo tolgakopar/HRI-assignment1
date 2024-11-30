@@ -73,6 +73,11 @@ end
 % (edit when necessary for inter/between subject analysis)
 
 % calculate mean and standard deviation of all repetitions
+<<<<<<< HEAD
+=======
+all_stats = [];
+
+>>>>>>> tolga
 for s = 1:nsub
     for t = 1:ntsk
         Mp  = data.sub(s).task(t).Mp';                      % magnitude of pilot vector
@@ -88,14 +93,42 @@ for s = 1:nsub
         data.sub(s).task(t).Apstd  = std(  Ap(:,:) );       % standard deviation of pilot phase angles for all reps.
         data.sub(s).task(t).Aolmn  = mean( Aol(:,:) );      % mean of open-loop phase angles for all repetitions
         data.sub(s).task(t).Aolstd = std(  Aol(:,:) );      % standard deviation of open-loop phase angles for all reps.
+<<<<<<< HEAD
     end
 end
 
+=======
+
+    end
+end
+
+task_means = struct();
+for t=1:ntsk
+    all_Mp = [];
+    all_Mol = [];
+    all_Ap = [];
+    all_Aol = [];
+    for s=1:nsub
+        all_Mp = [all_Mp; data.sub(s).task(t).Mp'];
+        all_Mol = [all_Mol; data.sub(s).task(t).Mol'];
+        all_Ap = [all_Ap; data.sub(s).task(t).Ap'];
+        all_Aol = [all_Aol; data.sub(s).task(t).Aol'];
+    end
+    task_means.task(t).all_Mp = all_Mp;
+    task_means.task(t).all_Mol = all_Mol;
+    task_means.task(t).all_Ap = all_Ap;
+    task_means.task(t).all_Aol = all_Aol;
+end
+
+
+
+>>>>>>> tolga
 %% Select data for showing in bode plots
 % alter this code when required, e.g. for between subject variability. But
 % use this code as example of extracting data from the struct and plotting
 % the data in bode plots
 
+<<<<<<< HEAD
 s = 3;                                        % select subject for bode plots
 t = 1;                                        % select task for bode plots
 
@@ -124,6 +157,29 @@ Apmn  = mean(Apmn, 1);
 Apstd  = mean(Apstd, 1);
 Aolmn  = mean(Aolmn, 1);
 Aolstd = mean(Aolstd, 1);
+=======
+s = 1;                                        % select subject for bode plots
+t = 1;                                        % select task for bode plots
+% extract data for bode plot from data struct for the selected task and subject
+W = data.sub(s).task(t).W(:,1)/(2*pi);   % frequency vector in Hz
+Snum   = data.sub(s).task(t).Snum(:,1)';      % system transfer function numerator
+Sden   = data.sub(s).task(t).Sden(:,1)';      % system transfer function denumerator
+
+Mpmn = mean(task_means.task(t).all_Mp(:,:));
+Mpstd = std(task_means.task(t).all_Mp(:,:));
+Molmn = mean(task_means.task(t).all_Mol(:,:));
+Molstd = std(task_means.task(t).all_Mol(:,:));
+Apmn = mean
+
+% Mpmn   = data.sub(s).task(t).Mpmn;            % pilot mean magniture
+% Mpstd  = data.sub(s).task(t).Mpstd;           % pilot st. dev. magniture
+% Molmn  = data.sub(s).task(t).Molmn;           % open-loop mean magniture
+% Molstd = data.sub(s).task(t).Molstd;          % open-loop st, dev. magniture
+% Apmn   = data.sub(s).task(t).Apmn;            % pilot mean phase angle
+% Apstd  = data.sub(s).task(t).Apstd;           % pilot st. dev. phase angle
+% Aolmn  = data.sub(s).task(t).Aolmn;           % open-loop mean phase angle
+% Aolstd = data.sub(s).task(t).Aolstd;          % open-loop st. dev. phase angle
+>>>>>>> tolga
 
             
 Hsys = tf(Snum,Sden);                         % transfer function of the measured system
@@ -148,6 +204,7 @@ Hmcr = tf([4 0],[1 0])                        % McRuer estimate of pilot; zeroth
 Mmcr = squeeze(mag(1,1,:));                   % magnitude of the pilot bodeplot
 Amcr = squeeze(phase(1,1,:));                 % phase angle of the pilot bodeplot
 
+<<<<<<< HEAD
 s_fd = tf('s')
 
 if t == 1
@@ -175,6 +232,8 @@ elseif t == 3
     Hmcr = Kp * (Tl*s_fd + 1) * exp(-Te * s_fd);  % Transfer function    
 
 end
+=======
+>>>>>>> tolga
 
 % Showing bode plot of selected subject and trial
 figure(3); clf; 
@@ -183,7 +242,11 @@ ax31 = subplot(211); hold on
     pl31(2) = errorbar(W,Mpmn,Mpstd,'Color','b');   % mean pilot magnitude with errorbars of the st. dev. of the magn.
     pl31(3) = errorbar(W,Molmn,Molstd,'Color','r'); % mean open-loop magnitude with errorbars of the st. dev. of the magn.
     pl31(4) = loglog(W,Msys,'.-g');                 % system magnitude for each frequency point
+<<<<<<< HEAD
     pl31(5) = loglog(W,Mmcr,'--c');                 % uncomment for McRuer magnitude estimate
+=======
+    pl31(5) = loglog(W,Mmcr,'--c');               % uncomment for McRuer magnitude estimate
+>>>>>>> tolga
     % loglog(W2, W2*0+1,'.-m')                      % displays the interpolated vector when placed in the correct figure
     % loglog(W2(iw2), W2(iw2)*0+1,'ok')             % displays the found vector value with a circle when placed in the correct figure
 

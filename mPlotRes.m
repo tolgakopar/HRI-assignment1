@@ -73,6 +73,8 @@ end
 % (edit when necessary for inter/between subject analysis)
 
 % calculate mean and standard deviation of all repetitions
+all_stats = [];
+
 for s = 1:nsub
     for t = 1:ntsk
         Mp  = data.sub(s).task(t).Mp';                      % magnitude of pilot vector
@@ -88,8 +90,29 @@ for s = 1:nsub
         data.sub(s).task(t).Apstd  = std(  Ap(:,:) );       % standard deviation of pilot phase angles for all reps.
         data.sub(s).task(t).Aolmn  = mean( Aol(:,:) );      % mean of open-loop phase angles for all repetitions
         data.sub(s).task(t).Aolstd = std(  Aol(:,:) );      % standard deviation of open-loop phase angles for all reps.
+
     end
 end
+
+task_means = struct();
+for t=1:ntsk
+    all_Mp = [];
+    all_Mol = [];
+    all_Ap = [];
+    all_Aol = [];
+    for s=1:nsub
+        all_Mp = [all_Mp; data.sub(s).task(t).Mp'];
+        all_Mol = [all_Mol; data.sub(s).task(t).Mol'];
+        all_Ap = [all_Ap; data.sub(s).task(t).Ap'];
+        all_Aol = [all_Aol; data.sub(s).task(t).Aol'];
+    end
+    task_means.task(t).all_Mp = all_Mp;
+    task_means.task(t).all_Mol = all_Mol;
+    task_means.task(t).all_Ap = all_Ap;
+    task_means.task(t).all_Aol = all_Aol;
+end
+
+
 
 %% Select data for showing in bode plots
 % alter this code when required, e.g. for between subject variability. But
@@ -97,33 +120,30 @@ end
 % the data in bode plots
 
 s = 1;                                        % select subject for bode plots
-t = 2;                                        % select task for bode plots
+t = 1;                                        % select task for bode plots
 
 % extract data for bode plot from data struct for the selected task and subject
-W(s,:)      = data.sub(s).task(t).W(:,1)/(2*pi);   % frequency vector in Hz
-Snum(s,:)   = data.sub(s).task(t).Snum(:,1)';      % system transfer function numerator
-Sden(s,:)   = data.sub(s).task(t).Sden(:,1)';      % system transfer function denumerator
-Mpmn(s,:)   = data.sub(s).task(t).Mpmn;            % pilot mean magniture
-Mpstd(s,:)  = data.sub(s).task(t).Mpstd;           % pilot st. dev. magniture
-Molmn(s,:)  = data.sub(s).task(t).Molmn;           % open-loop mean magniture
-Molstd(s,:) = data.sub(s).task(t).Molstd;          % open-loop st, dev. magniture
-Apmn(s,:)   = data.sub(s).task(t).Apmn;            % pilot mean phase angle
-Apstd(s,:)  = data.sub(s).task(t).Apstd;           % pilot st. dev. phase angle
-Aolmn(s,:)  = data.sub(s).task(t).Aolmn;           % open-loop mean phase angle
-Aolstd(s,:) = data.sub(s).task(t).Aolstd;          % open-loop st. dev. phase angle
+W = data.sub(s).task(t).W(:,1)/(2*pi);   % frequency vector in Hz
+Snum   = data.sub(s).task(t).Snum(:,1)';      % system transfer function numerator
+Sden   = data.sub(s).task(t).Sden(:,1)';      % system transfer function denumerator
 
-%% Find mean of subject trials.
-W      = mean(W, 1);
-Snum   = mean(Snum, 1);
-Sden   = mean(Sden, 1);
-Mpmn  = mean(Mpmn, 1);
-Mpstd = mean(Mpstd, 1);
-Molmn  = mean(Molmn, 1);
-Molstd = mean(Molstd, 1);
-Apmn  = mean(Apmn, 1);
-Apstd  = mean(Apstd, 1);
-Aolmn  = mean(Aolmn, 1);
-Aolstd = mean(Aolstd, 1);
+Mpmn = mean(task_means.task(t).all_Mp(:,:));
+Mpstd = std(task_means.task(t).all_Mp(:,:));
+Molmn = mean(task_means.task(t).all_Mol(:,:));
+Molstd = std(task_means.task(t).all_Mol(:,:));
+Apmn = mean(task_means.task(t).all_Ap(:,:));
+Apstd = std(task_means.task(t).all_Ap(:,:));
+Aolmn = mean(task_means.task(t).all_Aol(:,:));
+Aolstd = std(task_means.task(t).all_Aol(:,:));
+
+% Mpmn   = data.sub(s).task(t).Mpmn;            % pilot mean magniture
+% Mpstd  = data.sub(s).task(t).Mpstd;           % pilot st. dev. magniture
+% Molmn  = data.sub(s).task(t).Molmn;           % open-loop mean magniture
+% Molstd = data.sub(s).task(t).Molstd;          % open-loop st, dev. magniture
+% Apmn   = data.sub(s).task(t).Apmn;            % pilot mean phase angle
+% Apstd  = data.sub(s).task(t).Apstd;           % pilot st. dev. phase angle
+% Aolmn  = data.sub(s).task(t).Aolmn;           % open-loop mean phase angle
+% Aolstd = data.sub(s).task(t).Aolstd;          % open-loop st. dev. phase angle
 
             
 Hsys = tf(Snum,Sden);                         % transfer function of the measured system
