@@ -119,8 +119,7 @@ end
 % use this code as example of extracting data from the struct and plotting
 % the data in bode plots
 
-s = 1;                                        % select subject for bode plots
-t = 1;                                        % select task for bode plots
+t = 3;                                        % select task for bode plots
 
 % extract data for bode plot from data struct for the selected task and subject
 W = data.sub(s).task(t).W(:,1)/(2*pi);   % frequency vector in Hz
@@ -181,7 +180,7 @@ if t == 1
 elseif t == 2
     Kp = 4;          % Pilot gain
     Te = 0.5;          % Time delay (tau_e)
-    TI = 1;          % Time constant
+    TI = 5;          % Time constant
 
     Hmcr = Kp * exp(-Te * s_fd) / (TI*s_fd + 1);  % Transfer function
 
@@ -210,9 +209,9 @@ ax31 = subplot(211); hold on
     % loglog(W2(iw2), W2(iw2)*0+1,'ok')             % displays the found vector value with a circle when placed in the correct figure
 
     set(gca,'XScale','log','YScale','log')          % all shown in double logarithmic axis 
-    legend(pl31(2:5),'Pilot','Open Loop','System', 'pilot model')  % legend three selected plots, extend this when uncommenting the McRuer plot
+    legend(pl31(2:5),'Pilot','Open Loop','System', 'Pilot model')  % legend three selected plots, extend this when uncommenting the McRuer plot
     ylabel('Magnitude')
-    title(['Bode Plot of subject: ',num2str(s),' , task: ',num2str(t)])
+    title(['Bode Plot of task: ',num2str(t)])
     
 ax32 = subplot(212); hold on
     errorbar(W,Apmn,Apstd,'Color','b')              % mean pilot phase angle with errorbars of the st. dev. of the angle
