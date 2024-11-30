@@ -96,8 +96,8 @@ end
 % use this code as example of extracting data from the struct and plotting
 % the data in bode plots
 
-s = 1;                                        % select subject for bode plots
-t = 2;                                        % select task for bode plots
+s = 3;                                        % select subject for bode plots
+t = 1;                                        % select task for bode plots
 
 % extract data for bode plot from data struct for the selected task and subject
 W(s,:)      = data.sub(s).task(t).W(:,1)/(2*pi);   % frequency vector in Hz
@@ -148,19 +148,17 @@ Hmcr = tf([4 0],[1 0])                        % McRuer estimate of pilot; zeroth
 Mmcr = squeeze(mag(1,1,:));                   % magnitude of the pilot bodeplot
 Amcr = squeeze(phase(1,1,:));                 % phase angle of the pilot bodeplot
 
-s_fd = tf('s')                                % matlab transfer function s as building block for transfer functions
-
-% Pilot models per task, as provided in McRuers table II
+s_fd = tf('s')
 
 if t == 1
     Kp = 4;          % Pilot gain
-    Te = 0.5;          % Time delay (tau_e)    
+    Te = 0.5;        % Time delay (tau_e)    
 
     Hmcr = Kp * exp(-Te * s_fd)
 
 elseif t == 2
-    Kp = 4;          % Pilot gain
-    Te = 0.5;          % Time delay (tau_e)
+    Kp = 1;          % Pilot gain
+    Te = 0.5;        % Time delay (tau_e)
     TI = 1;          % Time constant
 
     Hmcr = Kp * exp(-Te * s_fd) / (TI*s_fd + 1);  % Transfer function
@@ -170,11 +168,11 @@ elseif t == 2
     Amcr = squeeze(phase(1,1,:));                 % phase angle of the pilot bodeplot
 
 elseif t == 3
-    Kp = 4;          % Pilot gain
-    Te = 0.5;          % Time delay (tau_e)
-    TL = 1;          % lag constant
+    Kp = 1;          % Example gain
+    Te = 0.5;        % Time delay (tau_e)
+    Tl = 1;          % lag constant
 
-    Hmcr = Kp * (TL*s_fd + 1) * exp(-Te * s_fd);  % Transfer function    
+    Hmcr = Kp * (Tl*s_fd + 1) * exp(-Te * s_fd);  % Transfer function    
 
 end
 
@@ -190,7 +188,7 @@ ax31 = subplot(211); hold on
     % loglog(W2(iw2), W2(iw2)*0+1,'ok')             % displays the found vector value with a circle when placed in the correct figure
 
     set(gca,'XScale','log','YScale','log')          % all shown in double logarithmic axis 
-    legend(pl31(2:5),'Pilot','Open Loop','System', 'pilot model')  % legend three selected plots, extend this when uncommenting the McRuer plot
+    legend(pl31(2:4),'Pilot','Open Loop','System')  % legend three selected plots, extend this when uncommenting the McRuer plot
     ylabel('Magnitude')
     title(['Bode Plot of subject: ',num2str(s),' , task: ',num2str(t)])
     
@@ -198,7 +196,7 @@ ax32 = subplot(212); hold on
     errorbar(W,Apmn,Apstd,'Color','b')              % mean pilot phase angle with errorbars of the st. dev. of the angle
     errorbar(W,Aolmn,Aolstd,'Color','r')            % mean open-loop phase angle with errorbars of the st. dev. of the angle
     plot(W, Asys,'.-g')                             % system phase angle
-    % plot(W, Amcr,'.--c')                          % uncomment for McRuer phase angle estimate
+    plot(W, Amcr,'.--c')                          % uncomment for McRuer phase angle estimate
     
     set(gca,'XScale','log','YScale','linear')       % all shown in single logarithmic axis
     ylabel('Phase Angle [deg]')
