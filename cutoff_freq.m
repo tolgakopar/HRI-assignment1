@@ -5,7 +5,7 @@
 % 3) Get the freq at that point.
 function W_cutoff = cutoff_freq(W, Mpmn)
     W2   = interp(W, 100); 
-    Apmn2 = interp(Apmn, 100);
+    Apmn2 = interp(Mpmn, 100);
     below_zero = find(Apmn2 <= 1, 1, 'first'); 
 
     if isempty(below_zero)
