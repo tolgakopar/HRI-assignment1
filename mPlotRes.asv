@@ -130,10 +130,7 @@ Mpmn = mean(task_means.task(t).all_Mp(:,:));
 Mpstd = std(task_means.task(t).all_Mp(:,:));
 Molmn = mean(task_means.task(t).all_Mol(:,:));
 Molstd = std(task_means.task(t).all_Mol(:,:));
-Apmn = mean(task_means.task(t).all_Ap(:,:));
-Apstd = std(task_means.task(t).all_Ap(:,:));
-Aolmn = mean(task_means.task(t).all_Aol(:,:));
-Aolstd = std(task_means.task(t).all_Aol(:,:));
+Apmn = mean
 
 % Mpmn   = data.sub(s).task(t).Mpmn;            % pilot mean magniture
 % Mpstd  = data.sub(s).task(t).Mpstd;           % pilot st. dev. magniture
