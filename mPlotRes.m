@@ -185,17 +185,18 @@ elseif t == 2
     Hmcr = Kp * exp(-Te * s_fd) / (TI*s_fd + 1);  % Transfer function
 
     [mag,phase] = bode(Hmcr,W);                   % bodeplot of the pilot transfer function
-    Mmcr = squeeze(mag(1,1,:));                   % magnitude of the pilot bodeplot
-    Amcr = squeeze(phase(1,1,:));                 % phase angle of the pilot bodeplot
 
 elseif t == 3
     Kp = 4;          % Pilot gain
     Te = 0.5;          % Time delay (tau_e)
     TL = 1;          % lag constant
 
-    Hmcr = Kp * (TL*s_fd + 1) * exp(-Te * s_fd);  % Transfer function    
+    Hmcr = Kp * (TL*s_fd + 1) * exp(-Te * s_fd);  % Transfer function
 
 end
+
+Mmcr = squeeze(mag(1,1,:));                   % magnitude of the pilot bodeplot
+Amcr = squeeze(phase(1,1,:));                 % phase angle of the pilot bodeplot
 
 % Showing bode plot of selected subject and trial
 figure(3); clf; 
